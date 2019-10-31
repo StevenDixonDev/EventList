@@ -52,7 +52,7 @@ function timeOutTest(next) {
   });
 }
 
-El.style = QUEUE;
+El.style = STACK;
 
 El.addEvent(myAwesomeFunction);
 El.addEvent(timeOutTest);

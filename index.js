@@ -1,60 +1,75 @@
-// start project
-const QUEUE = "queue";
-const STACK = "stack";
-
-function eventList() {
-  this.list = [];
-  this.style = QUEUE;
-  this.run = () => {
+class eventList {
+  constructor(){
+    this.list = [];
+    this.beforeA = (next) => {next()};
+    this.beforeE = () => {};
+  }
+  run = () => {
     // start the list
+    this.list = [this.beforeA, ...this.list];
+    
     this.next();
   };
-  this.addEvent = f => {
-    if (this.style === QUEUE) {
-      // add to the back
-      this.list.push(f);
-    } else if (this.style === STACK) {
-      // add to the front
-      this.list = [f, ...this.list];
-    }
+
+  addEvent = (f, ...rest) =>{
+      this.list = [f.bind(null, this.next, ...rest) ,...this.list];
   };
-  this.next = err => {
-    if (err) {
-      return err;
-    }
+  // ?? maybe add middleware style items?
+  addMiddleEvent = f =>{
+    
+  };
+
+  // beforeAll takes a function that runs before the stack runs 
+  beforeAll = (f) => {
+    this.beforeA =  f.bind(null, this.next);
+  }
+  // before Each takes in a function and the returns it to the params of 
+  // the current item
+  beforeEach = (f) => {
+    this.beforeE =  f;
+  }
+
+  next = (...rest) => {
     const [current] = this.list.slice(0, 1);
-    this.list = this.list.slice(1);
     if (current && typeof current === "function") {
-      return current(this.next);
+      this.list = this.list.slice(1);
+      return current(this.beforeE(...rest));
     } else {
       console.log("done");
     }
   };
 }
 
+
+// works great but user cannot pass values to the function...
 const El = new eventList();
 
 // define a function that takes the next item
-function myAwesomeFunction(next) {
-  console.log("hi");
-  next();
-}
-
-const test = next => {
-  console.log("hmmm");
-  next();
+const test = (next, i) => {
+  console.log(i);
+  next(i);
 };
 
-function timeOutTest(next) {
+function timeOutTest(next, i) {
   setTimeout(() => {
-    console.log("I am timed!");
-    next();
+    console.log(i);
+    next(i);
   });
 }
 
-El.style = QUEUE;
+El.beforeAll(
+  function(next)
+  {
+    let i = 0;
+    console.log("wow");
+    next(i);
+  })
 
-El.addEvent(myAwesomeFunction);
+El.beforeEach((i)=>{
+  return i+1;
+})
+
+El.addEvent(test);
 El.addEvent(timeOutTest);
 
 El.run();

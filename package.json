@@ -4,7 +4,7 @@
   "description": "Eventlist is a ? for and event system for games or other event based apps.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/StevenDixonDev/EventList/issues"
   },
-  "homepage": "https://github.com/StevenDixonDev/EventList#readme"
+  "homepage": "https://github.com/StevenDixonDev/EventList#readme",
+  "dependencies": {
+    "jest": "^24.9.0"
+  }
 }

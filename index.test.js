@@ -1,4 +1,15 @@
-// default test
-test('1', () => {
-  expect(1).toBe(1);
+const eventList = require('./index');
+
+test('Add an event works', ()=> {
+  function test(next){
+    console.log("test");
+    next();
+  }
+  eventList.addEvent(test);
+  expect(eventList.getEvents().length).toBe(1);
+});
+
+test('run should return undefined', ()=> {
+  console.log(eventList.getEvents())
+  expect(eventList.run()).toBe(undefined);
 });

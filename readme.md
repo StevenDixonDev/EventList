@@ -27,3 +27,4 @@ let complexity evolve into the system in the form of features.
 1. using class to generate an object.
   * Issue: have to create a new object each time and the list will have to passed around
 2. Using Closure to generate a function based system.
+  * Seems to be working

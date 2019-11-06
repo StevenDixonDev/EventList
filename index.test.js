@@ -10,6 +10,5 @@ test('Add an event works', ()=> {
 });
 
 test('run should return undefined', ()=> {
-  console.log(eventList.getEvents())
   expect(eventList.run()).toBe(undefined);
 });

@@ -2,16 +2,16 @@ let events = [];
 
 const eventList = {
   // add event to the list of events to be parsed binds the next event to the item
-  addEvent: function(event, ...rest) {
+  addEvent: function(event) {
     if(typeof event == "function"){
-      events = [event.bind(null, this.next, ...rest), ...events];
+      events = [event.bind(null, this.next), ...events];
     }
     else if(Array.isArray(event)){
       let bindedArr = event.map(e => {
         if(typeof e !== 'function'){
           throw new Error("EventList does not accept " + typeof event);
         }else{
-          return e = e.bind(null, this.next, ...rest);
+          return e = e.bind(null, this.next);
         }
       })
       events = [...bindedArr, ...events];

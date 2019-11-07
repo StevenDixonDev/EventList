@@ -76,8 +76,11 @@ test("Can add an event during event running", (done) => {
 
   eventList.addEvent(next => {
     i += "3";
+    l = "r"
     eventList.addEvent(next => {
       i += "5";
+      // closure still works
+      console.log(l);
       next();
     });
     eventList.addEvent(next => {
@@ -97,3 +100,4 @@ test("Can add an event during event running", (done) => {
     done();
   });
 });
+

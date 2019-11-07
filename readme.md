@@ -8,7 +8,7 @@ This is my attempt to code a management system for these items.
 
 Start with a Linked list style object
 
-give the user the ability to add items to the list 
+give the user the ability to add items to the list
 
 let complexity evolve into the system in the form of features.
 
@@ -25,8 +25,50 @@ let complexity evolve into the system in the form of features.
 ## Design Iterations
 
 1. using class to generate an object.
-  * Issue: have to create a new object each time and the list will have to passed around
+
+- Issue: have to create a new object each time and the list will have to passed around
+
 2. Using Closure to generate a function based system.
-  * Seems to be working
-  * How to determine when the events are cleared?
-  * Event List is an oddity, should I make them a list of promises?
+
+- Seems to be working
+- How to determine when the events are cleared?
+- Event List is an oddity, should I make them a list of promises?
+
+## Use
+
+The idea is that event list aggregates events based on user inputs and runs them
+
+```JavaScript
+// in main file
+import eventList from "eventlist";
+import Player from "./player.js";
+
+const myGameLoop = () => {
+
+  eventList.addEvent((next)=> {update(); next();});
+  eventList.addEvent((next)=> {draw(); next();})
+  eventList.run()
+  .then(()=>{
+    window.requestAnimationFrame(myGameLoop);
+  })
+}
+
+// in player file
+import eventList from "eventlist";
+
+const Player = {
+  x: 0,
+  y: 0,
+  Move: function(){
+    eventList.addEvent(
+      (next())=>{
+        this.x += 1;
+        next();
+      }
+    );
+  }
+}
+
+```
+
+Although writing this out, it seems like a lot of overhead for a simple game.

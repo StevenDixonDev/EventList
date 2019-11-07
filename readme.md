@@ -28,3 +28,5 @@ let complexity evolve into the system in the form of features.
   * Issue: have to create a new object each time and the list will have to passed around
 2. Using Closure to generate a function based system.
   * Seems to be working
+  * How to determine when the events are cleared?
+  * Event List is an oddity, should I make them a list of promises?

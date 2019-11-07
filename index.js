@@ -3,10 +3,21 @@ let events = [];
 const eventList = {
   // add event to the list of events to be parsed binds the next event to the item
   addEvent: function(event, ...rest) {
-    if(typeof event !== "function"){
-      throw new Error("EventList does not accept " + typeof event);
-    }else{
+    if(typeof event == "function"){
       events = [event.bind(null, this.next, ...rest), ...events];
+    }
+    else if(Array.isArray(event)){
+      let bindedArr = event.map(e => {
+        if(typeof e !== 'function'){
+          throw new Error("EventList does not accept " + typeof event);
+        }else{
+          return e = e.bind(null, this.next, ...rest);
+        }
+      })
+      events = [...bindedArr, ...events];
+    }
+    else{
+      throw new Error("EventList does not accept " + typeof event);
     }
   },
   // return list of events for length purposes?

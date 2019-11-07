@@ -1,7 +1,7 @@
-const eventList = require('./index');
+const eventList = require("./index");
 
-test('Add events works', ()=> {
-  function test(next){
+test("Add events works increases size of events array", () => {
+  function test(next) {
     next();
   }
   eventList.addEvent(test);
@@ -11,17 +11,36 @@ test('Add events works', ()=> {
   expect(eventList.getEvents().length).toBe(4);
 });
 
-test('run should return done when list is done', (done)=> {
+test("Can Add Array of events, trigger in order", (done) => {
+  let i = "";
+  eventList.addEvent([
+    next => {
+      i += 'h';
+      next();
+    },
+    next => {
+      i += 'i';
+      next();
+    }
+  ]);
+
+  eventList.run().then(() => {
+    expect(i).toBe("hi");
+    done();
+  });
+});
+
+test("eventList.run should return done when list is done", done => {
   eventList.run().then(data => {
     expect(data).toBe("done");
     done();
-  })
+  });
 });
 
-test('Functions do not lose scope', (done)=> {
+test("Functions do not lose scope", done => {
   let name = "bob";
-  
-  eventList.addEvent((next)=>{
+
+  eventList.addEvent(function(next) {
     name = "steven";
     next();
   });
@@ -32,23 +51,49 @@ test('Functions do not lose scope', (done)=> {
   });
 });
 
-test('Adding non functions to event list should through error', ()=> {
- 
-  try{
+test("Adding non functions to event list should through error", () => {
+  try {
     eventList.addEvent("1");
-  }catch(err){
+  } catch (err) {
     expect(err.message).toBe("EventList does not accept string");
   }
-  
-  try{
+
+  try {
     eventList.addEvent(0);
-  }catch(err){
+  } catch (err) {
     expect(err.message).toBe("EventList does not accept number");
   }
-  
-  try{
+
+  try {
     eventList.addEvent({});
-  }catch(err){
+  } catch (err) {
     expect(err.message).toBe("EventList does not accept object");
   }
+});
+
+test("Can add an event during event running", (done) => {
+  let i = "1";
+
+  eventList.addEvent(next => {
+    i += "3";
+    eventList.addEvent(next => {
+      i += "5";
+      next();
+    });
+    eventList.addEvent(next => {
+      i += "4";
+      next();
+    });
+    next();
+  });
+
+  eventList.addEvent(next => {
+    i += "2";
+    next();
+  });
+
+  eventList.run().then(() => {
+    expect(i).toBe("12345");
+    done();
+  });
 });

@@ -1,4 +1,6 @@
-const eventList = require("./index");
+const {eventList, useEventList} = require("./index");
+
+console.log(useEventList)
 
 test("Add events works increases size of events array", () => {
   function test(next) {
@@ -101,3 +103,18 @@ test("Can add an event during event running", (done) => {
   });
 });
 
+test("useEventList version working", (done) => {
+  const {add, run} = useEventList();
+  console.log(add)
+  let i = 0;
+
+  add((next)=>{
+    i += 1;
+    next();
+  })
+
+ run().then(() => {
+    expect(i).toBe(1);
+    done();
+  });
+});

@@ -31,8 +31,7 @@ let complexity evolve into the system in the form of features.
 2. Using Closure to generate a function based system.
 
 - Seems to be working
-- How to determine when the events are cleared?
-- Event List is an oddity, should I make them a list of promises?
+- How to determine when the events are cleared? promises
 
 ## Use
 
